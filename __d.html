@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FIFTHS COLLECTIVE — Links</title>
+<meta name="description" content="Fifths Collective — matcha, Chicago. TikTok, Instagram, email." />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+  :root {
+    --maroon: #7a1830;
+    --maroon-deep: #5c0f22;
+    --foam: #f3efe6;
+    --matcha: #3da54c;          /* brand green, matching the cup sticker */
+    --ink: #17120f;
+    /* Silver sheen: four stops sampled off the reference swatch — a bright band
+       left of centre falling away to a deeper grey on both edges. */
+    --sil-hi: #f7f8f9;
+    --sil-mid: #d3d7db;
+    --sil-low: #9ba1a8;
+    --sil-edge: #7d848c;
+    --display: 'Archivo Black', 'Arial Black', sans-serif;
+    --body: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+
+  body {
+    font-family: var(--body);
+    color: var(--ink);
+    display: flex;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+
+    /* Brushed silver. The vertical bands do the sheen; the fine fractal-noise layer on top
+       is what stops it reading as a flat CSS gradient and gives it the grain of the swatch. */
+    background-color: var(--sil-mid);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.17'/%3E%3C/svg%3E"),
+      /* secondary sheen — a second, softer highlight keeps it from reading as one flat ramp */
+      linear-gradient(93deg,
+        rgba(255,255,255,0) 52%,
+        rgba(255,255,255,0.45) 66%,
+        rgba(255,255,255,0) 79%),
+      linear-gradient(97deg,
+        var(--sil-edge) 0%,
+        var(--sil-low) 7%,
+        var(--sil-mid) 17%,
+        var(--sil-hi) 28%,
+        #ffffff 35%,
+        var(--sil-hi) 41%,
+        var(--sil-mid) 52%,
+        var(--sil-low) 68%,
+        var(--sil-mid) 83%,
+        var(--sil-edge) 100%);
+    background-attachment: fixed, fixed, fixed;
+  }
+
+  /* ── Signature: the label print. Stacked FIFTHS COLLECTIVE rows, like the cup sticker ── */
+  .print {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    /* Ink instead of cream now the ground is light — same print, inverted to stay readable. */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='128' viewBox='0 0 600 128'%3E%3Ctext x='0' y='44' font-family='Arial, Helvetica, sans-serif' font-weight='700' font-size='40' fill='%2317120f' fill-opacity='0.034' textLength='600' lengthAdjust='spacingAndGlyphs'%3EFIFTHS COLLECTIVE %3C/text%3E%3Ctext x='0' y='108' font-family='Arial, Helvetica, sans-serif' font-weight='700' font-size='40' fill='%2317120f' fill-opacity='0.034' textLength='600' lengthAdjust='spacingAndGlyphs'%3ECOLLECTIVE FIFTHS %3C/text%3E%3C/svg%3E");
+    background-size: 600px 128px;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 56px 22px 36px;
+  }
+
+  /* ── Hero: heavy italic speed wordmark ── */
+  .mark { text-align: center; }
+
+  /* The sticker logo stands in for the old type lockup. Square, hard-edged, no rounding —
+     it reads as the decal stuck on the cart rather than a profile picture. */
+  h1 { margin: 0; line-height: 0; }
+
+  .logo {
+    width: clamp(150px, 46vw, 196px);
+    height: auto;
+    display: inline-block;
+    border: 2px solid var(--ink);
+  }
+
+  .tagline {
+    margin-top: 22px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-align: center;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 36px 0 26px;
+    color: rgba(23, 18, 15, 0.75);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+  .divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgba(23, 18, 15, 0.3);
+  }
+
+  /* ── Link rows: cream label blocks on the maroon print ── */
+  .links { display: flex; flex-direction: column; gap: 14px; }
+
+  .link-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 20px;
+    /* Ink blocks, not cream: on a silver ground a cream block sits too close in value
+       and the rows stop reading as buttons. */
+    background: var(--ink);
+    color: var(--foam);
+    text-decoration: none;
+    border: 2px solid var(--ink);
+    transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  }
+
+  .link-row:hover,
+  .link-row:focus-visible {
+    background: var(--matcha);
+    border-color: var(--ink);
+    color: var(--ink);
+    transform: translateY(-2px);
+  }
+
+  .link-row:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  .link-label { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+
+  .link-platform {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .link-handle {
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0.75;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .link-arrow { font-family: var(--display); font-size: 20px; flex-shrink: 0; }
+
+  /* email row: outlined, so the silver shows through and it reads as secondary */
+  .link-row.alt {
+    background: transparent;
+    color: var(--ink);
+    border: 2px solid var(--ink);
+  }
+  .link-row.alt:hover,
+  .link-row.alt:focus-visible {
+    background: var(--ink);
+    color: var(--foam);
+    border-color: var(--ink);
+  }
+
+  .copy-note {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    min-height: 16px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .copy-note.show { opacity: 1; }
+
+  footer {
+    margin-top: auto;
+    padding-top: 44px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(23, 18, 15, 0.6);
+  }
+
+  .mark, .tagline, .divider, .link-row, footer { animation: rise 0.55s ease both; }
+  .tagline { animation-delay: 0.08s; }
+  .divider { animation-delay: 0.16s; }
+  .link-row:nth-child(1) { animation-delay: 0.22s; }
+  .link-row:nth-child(2) { animation-delay: 0.30s; }
+  .link-row:nth-child(3) { animation-delay: 0.38s; }
+  .link-row:nth-child(4) { animation-delay: 0.46s; }
+  footer { animation-delay: 0.58s; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mark, .tagline, .divider, .link-row, footer { animation: none; }
+    .link-row, .link-row.alt { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="print" aria-hidden="true"></div>
+
+  <main class="page">
+    <header class="mark">
+      <h1><img class="logo" src="logo.png" width="560" height="560" alt="Fifths Collective" /></h1>
+      <p class="tagline">Mobile Cart · Matcha · Chicago</p>
+    </header>
+
+    <div class="divider" aria-hidden="true">Find us</div>
+
+    <nav class="links" aria-label="Fifths Collective social links">
+      <a class="link-row" href="https://fifthscollective.com" target="_blank" rel="noopener">
+        <span class="link-label">
+          <span class="link-platform">Website</span>
+          <span class="link-handle">Menu &amp; book the cart</span>
+        </span>
+        <span class="link-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="link-row" href="https://www.tiktok.com/@fifthscafe" target="_blank" rel="noopener">
+        <span class="link-label">
+          <span class="link-platform">TikTok</span>
+          <span class="link-handle">@fifthscafe</span>
+        </span>
+        <span class="link-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="link-row" href="https://www.instagram.com/fifthscollective" target="_blank" rel="noopener">
+        <span class="link-label">
+          <span class="link-platform">Instagram</span>
+          <span class="link-handle">@fifthscollective</span>
+        </span>
+        <span class="link-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="link-row alt" href="mailto:Fifthscollective@gmail.com" id="emailRow">
+        <span class="link-label">
+          <span class="link-platform">Email</span>
+          <span class="link-handle">fifthscollective@gmail.com</span>
+        </span>
+        <span class="link-arrow" aria-hidden="true">→</span>
+      </a>
+    </nav>
+
+    <p class="copy-note" id="copyNote" role="status">Email copied</p>
+
+    <footer>© Fifths Collective · Chicago, IL</footer>
+  </main>
+
+  <script>
+    const emailRow = document.getElementById('emailRow');
+    const note = document.getElementById('copyNote');
+    emailRow.addEventListener('click', () => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText('Fifthscollective@gmail.com').then(() => {
+          note.classList.add('show');
+          setTimeout(() => note.classList.remove('show'), 2200);
+        }).catch(() => {});
+      }
+    });
+  </script>
+</body>
+</html>
+<script>window.addEventListener('load',()=>{const d=document.createElement('div');
+d.style.cssText='position:fixed;top:0;left:0;z-index:99;background:#ff0;color:#000;font:12px monospace;padding:4px';
+d.textContent='vw='+innerWidth+' scrollW='+document.documentElement.scrollWidth;
+document.body.prepend(d);});</script>
