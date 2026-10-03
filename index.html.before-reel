@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="only light">
+<title>Fifths Cafe — Mobile Matcha Cart, Chicago</title>
+<meta name="description" content="Fifths Cafe is a matcha-forward mobile cafe in Chicago. Single-origin, cultivar-transparent matcha. Book the cart for weddings, popups and events.">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          reg:  ['Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+          bold: ['Archivo', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+        },
+        colors: {
+          paper: '#FEFEFE',
+          ink:   '#000000',
+          fifth: '#3DA54C',
+          olive: '#8B8449',
+          maroon:'#6E1330',
+        },
+      },
+    },
+  }
+</script>
+<style>
+  :root { --gm: 16px; }
+  @media (min-width: 1024px) { :root { --gm: 20px; } }
+
+  html {
+    /* This design is light-only. Without this, Chrome mobile's Auto Dark
+       Theme force-inverts the page into a black site we never designed. */
+    color-scheme: only light;
+    -webkit-text-size-adjust: 100%;
+    font-variant-ligatures: none;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    background-color: #FEFEFE;
+    font-size: 16px;
+    line-height: 1.5;
+    scroll-behavior: smooth;
+  }
+  body { background-color: #FEFEFE; }
+
+  .gm { padding-left: var(--gm); padding-right: var(--gm); }
+
+  /* Heavy display type — stands in for the brand's Helvetica Black lockup */
+  .display {
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 0.82;
+    text-transform: uppercase;
+  }
+
+  /* Footer wordmark sits flush to the bottom edge, optically cropped like the reference.
+     The negative margin eats Archivo's descender space so the glyphs meet the page edge.
+     Tracking stays loose enough that the F's arm clears the T's crossbar — any tighter
+     and the two fuse into one bar. Size is set to still span the full width. */
+  /* The FIFTHS wordmarks must use a face whose F arm and T crossbar are the SAME thickness,
+     because the logo merges them into one bar. Archivo fails this (T crossbar 35 vs F arm 33
+     at 200px) and leaves an uneven step. Inter 900 matches at 32/32 and is heavier than the
+     logo's Helvetica Bold (32px bars vs 26px), so it reads bolder while still fusing clean. */
+  .wordmark {
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    line-height: 1;
+    /* 3.4395 = the word's measured width in ems at this tracking/kern. Dividing the usable
+       width by it spans the wordmark margin-to-margin exactly at any viewport, rather than
+       a fixed vw that clips the S on narrow screens. */
+    font-size: calc((100vw - var(--gm) * 2) / 3.4395);
+    white-space: nowrap;
+    display: block;
+    margin-bottom: -0.225em;
+  }
+
+  /* Closes the 0.04em sliver Inter leaves between F and T so they overlap into the single
+     unbroken bar the logo has. */
+  .kern-t { margin-left: -0.05em; }
+
+  /* Header lockup: same cut as the footer wordmark, scaled to sit beside the logo tile.
+     The nudge optically centres the caps against the square. Steps down on narrow
+     phones so the lockup and the menu button never collide. */
+  .wordmark-sm {
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    line-height: 1;
+    font-size: 29px;
+    display: block;
+    transform: translateY(-1px);
+  }
+  @media (min-width: 400px) { .wordmark-sm { font-size: 35px; } }
+  @media (min-width: 640px) { .wordmark-sm { font-size: 39px; } }
+
+  /* Force the ✳ separators to render as text, not as Apple's green emoji. */
+  .display, .prose li::before { font-variant-emoji: text; }
+
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker 38s linear infinite;
+  }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } }
+
+  .link-u { position: relative; }
+  .link-u::after {
+    content: ""; position: absolute; left: 0; bottom: -1px; height: 1px; width: 100%;
+    background: currentColor; transform: scaleX(0); transform-origin: right;
+    transition: transform .35s cubic-bezier(.19,1,.22,1);
+  }
+  .link-u:hover::after { transform: scaleX(1); transform-origin: left; }
+
+  /* Hero reel */
+  .hero-frame { height: calc(100svh - 4rem); min-height: 520px; }
+
+  /* All clips occupy the frame at once; only .is-active is visible. Both sides of a handover
+     animate at the same time, so the pair reads as one cross-dissolve. */
+  .hero-clip {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 700ms ease-in-out;
+  }
+  .hero-clip.is-active { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-clip { transition: none; }
+  }
+
+  input::placeholder, textarea::placeholder { color: #B9B9B9; }
+  input:focus, textarea:focus, select:focus { outline: 2px solid #3DA54C; outline-offset: -2px; }
+
+  /* Booking form: 1px hairlines between cells rather than doubled-up borders */
+  .field { border: 1px solid #000; border-bottom: 0; background: #fff; }
+  .field:last-of-type { border-bottom: 1px solid #000; }
+
+  /* Match the select to the text placeholders until a real choice is made, and
+     restore the caret that appearance-none strips off. */
+  select.field-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%23000' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+  }
+  select.field-select:has(option[value=""]:checked) { color: #B9B9B9; }
+  select.field-select option { color: #000; }
+</style>
+</head>
+
+<body class="bg-paper text-ink font-reg antialiased">
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-paper">
+  <div class="gm flex items-center justify-between h-16">
+
+    <a href="#" aria-label="Fifths Collective — home" class="flex items-center gap-2.5 shrink-0">
+      <img src="logo.png" alt=""
+           class="h-11 w-11 object-cover block">
+      <span class="wordmark-sm">Fif<span class="kern-t">t</span>hs</span>
+    </a>
+
+    <div class="flex items-center gap-4 sm:gap-5">
+      <a href="#contact" class="display text-[13px] tracking-[0.01em] link-u">Book&nbsp;Us</a>
+      <button id="menuBtn" aria-label="Open menu" class="flex flex-col justify-center gap-[4px] w-7 h-7 items-end">
+        <span class="block h-[3px] w-6 bg-ink rounded-full"></span>
+        <span class="block h-[3px] w-6 bg-ink rounded-full"></span>
+        <span class="block h-[3px] w-6 bg-ink rounded-full"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ SLIDE-OUT NAV ══════════════ -->
+<div id="navPanel" class="fixed inset-0 z-[60] bg-paper translate-y-[-100%] transition-transform duration-500 ease-[cubic-bezier(.19,1,.22,1)]">
+  <div class="gm flex items-center justify-between h-16">
+    <img src="logo.png" alt="" class="h-11 w-11 object-cover block">
+    <button id="navClose" aria-label="Close menu" class="display text-[13px]">Close</button>
+  </div>
+  <nav class="gm mt-6 flex flex-col">
+    <a href="#menu"     class="nav-link display text-[13vw] md:text-[7vw] py-1 hover:text-fifth transition-colors">Menu</a>
+    <a href="#about"    class="nav-link display text-[13vw] md:text-[7vw] py-1 hover:text-fifth transition-colors">About</a>
+    <a href="#bookings" class="nav-link display text-[13vw] md:text-[7vw] py-1 hover:text-fifth transition-colors">Bookings</a>
+    <a href="#contact"  class="nav-link display text-[13vw] md:text-[7vw] py-1 hover:text-fifth transition-colors">Contact</a>
+  </nav>
+</div>
+
+<main class="pt-16">
+
+  <!-- ══════════════ HERO ══════════════ -->
+  <section class="hero-frame relative w-full overflow-hidden bg-ink">
+    <h1 class="sr-only">Fifths Cafe — a matcha-forward mobile cafe in Chicago</h1>
+    <!-- Three clips stacked in one frame; the script cross-dissolves between them.
+         Muted + playsinline are what let mobile browsers autoplay at all. Only the first clip is
+         fetched up front — the others load as the sequence reaches them. -->
+    <video class="hero-clip is-active" poster="cart-poster.jpg"
+           autoplay muted playsinline preload="auto"
+           aria-label="Fifths Collective staff serving a customer at the cart">
+      <source src="hero-1.mp4" type="video/mp4">
+    </video>
+    <video class="hero-clip" poster="poster-2.jpg"
+           muted playsinline preload="none" aria-hidden="true">
+      <source src="hero-2.mp4" type="video/mp4">
+    </video>
+    <video class="hero-clip" poster="poster-3.jpg"
+           muted playsinline preload="none" aria-hidden="true">
+      <source src="hero-3.mp4" type="video/mp4">
+    </video>
+    <video class="hero-clip" poster="poster-4.jpg"
+           muted playsinline preload="none" aria-hidden="true">
+      <source src="hero-4.mp4" type="video/mp4">
+    </video>
+    <video class="hero-clip" poster="poster-5.jpg"
+           muted playsinline preload="none" aria-hidden="true">
+      <source src="hero-5.mp4" type="video/mp4">
+    </video>
+  </section>
+
+  <!-- ══════════════ TICKER ══════════════ -->
+  <section class="border-y border-ink bg-fifth overflow-hidden py-2.5">
+    <div class="ticker-track">
+      <div class="flex items-center shrink-0">
+        <span class="display text-[15px] px-4">Mobile Matcha Cart</span><span class="display text-[15px]">✳︎</span>
+        <span class="display text-[15px] px-4">Chicago, IL</span><span class="display text-[15px]">✳︎</span>
+        <span class="display text-[15px] px-4">Single-Origin</span><span class="display text-[15px]">✳︎</span>
+        <span class="display text-[15px] px-4">Cultivar-Transparent</span><span class="display text-[15px]">✳︎</span>
+        <span class="display text-[15px] px-4">Uji, Kyoto</span><span class="display text-[15px]">✳︎</span>
+        <span class="display text-[15px] px-4">Book the Cart</span><span class="display text-[15px]">✳︎</span>
+      </div>
+      <div class="flex items-center shrink-0" aria-hidden="true">
+        <span class="display text-[15px] px-4">Mobile Matcha Cart</span><span class="display text-[15px]">✳︎</span>
+        <span class="display text-[15px] px-4">Chicago, IL</span><span class="display text-[15px]">✳︎</span>
+        <span class="display text-[15px] px-4">Single-Origin</span><span class="display text-[15px]">✳︎</span>
+        <span class="display text-[15px] px-4">Cultivar-Transparent</span><span class="display text-[15px]">✳︎</span>
+        <span class="display text-[15px] px-4">Uji, Kyoto</span><span class="display text-[15px]">✳︎</span>
+        <span class="display text-[15px] px-4">Book the Cart</span><span class="display text-[15px]">✳︎</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ ABOUT ══════════════ -->
+  <section id="about" class="gm pt-16 pb-14 md:pt-24 md:pb-20">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-y-8 md:gap-x-6">
+      <div class="md:col-span-3 min-w-0">
+        <p class="display text-[13px]">(&thinsp;About&thinsp;)</p>
+      </div>
+      <div class="md:col-span-9 min-w-0">
+        <h2 class="display text-[8.5vw] md:text-[4.6vw] leading-[0.88] max-w-[19ch]">
+          A matcha-forward mobile cafe in Chicago.
+        </h2>
+        <p class="mt-7 max-w-[54ch] text-[16px] md:text-[18px] leading-[1.45]">
+          Fifths Cafe is the cart. We bring the whole bar to you. We build our menu around
+          single-origin, cultivar-transparent matcha, which means we'll always tell you exactly
+          what's in the cup: the cultivar and the harvest. No house blends, no mystery
+          green powder.
+        </p>
+        <p class="mt-4 max-w-[54ch] text-[16px] md:text-[18px] leading-[1.45]">
+          Right now that's a single-cultivar, first-flush Okumidori out of Uji, Kyoto.
+          Deep, rounded umami and a mellow sweetness, vivid green in the cup.
+        </p>
+
+        <dl class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-y-6 gap-x-4 border-t border-ink pt-5">
+          <div>
+            <dt class="display text-[12px] text-fifth">Region</dt>
+            <dd class="display text-[16px] mt-1">Uji, Kyoto</dd>
+          </div>
+          <div>
+            <dt class="display text-[12px] text-fifth">Cultivar</dt>
+            <dd class="display text-[16px] mt-1">Okumidori</dd>
+          </div>
+          <div>
+            <dt class="display text-[12px] text-fifth">Harvest</dt>
+            <dd class="display text-[16px] mt-1">First Flush</dd>
+          </div>
+          <div>
+            <dt class="display text-[12px] text-fifth">Grade</dt>
+            <dd class="display text-[16px] mt-1">Ceremonial</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ MENU ══════════════ -->
+  <section id="menu" class="gm pb-16 md:pb-24">
+    <div class="flex items-end justify-between border-b border-ink pb-3 mb-8">
+      <h2 class="display text-[14vw] md:text-[9vw] leading-[0.8]">Menu</h2>
+      <span class="display text-[13px] pb-2">(&thinsp;On&nbsp;the&nbsp;Cart&thinsp;)</span>
+    </div>
+
+    <h3 class="display text-[7vw] md:text-[3.2vw] mb-4">Matcha &amp; Hojicha</h3>
+    <ul class="border-t border-ink">
+      <li class="flex items-start justify-between gap-6 border-b border-ink/15 py-4">
+        <div>
+          <p class="display text-[17px] md:text-[20px] tracking-[-0.01em]">The Classic</p>
+          <p class="italic text-[14px] md:text-[15px] text-ink/60 mt-1">Matcha or hojicha, sweetened with agave or vanilla.</p>
+        </div>
+        <p class="display text-[17px] md:text-[20px] shrink-0">$8&thinsp;/&thinsp;$9</p>
+      </li>
+      <li class="flex items-start justify-between gap-6 border-b border-ink/15 py-4">
+        <div>
+          <p class="display text-[17px] md:text-[20px] tracking-[-0.01em]">Salted Matcha Einspanner</p>
+          <p class="italic text-[14px] md:text-[15px] text-ink/60 mt-1">Salted sweet cream over matcha.</p>
+        </div>
+        <p class="display text-[17px] md:text-[20px] shrink-0">$9</p>
+      </li>
+      <li class="flex items-start justify-between gap-6 border-b border-ink/15 py-4">
+        <div>
+          <p class="display text-[17px] md:text-[20px] tracking-[-0.01em]">Salted Hojicha Einspanner</p>
+          <p class="italic text-[14px] md:text-[15px] text-ink/60 mt-1">Salted sweet cream over hojicha.</p>
+        </div>
+        <p class="display text-[17px] md:text-[20px] shrink-0">$9</p>
+      </li>
+      <li class="flex items-start justify-between gap-6 border-b border-ink/15 py-4">
+        <div>
+          <p class="display text-[17px] md:text-[20px] tracking-[-0.01em]">Strawberry Matcha</p>
+          <p class="italic text-[14px] md:text-[15px] text-ink/60 mt-1">House-made aged strawberry purée with matcha.</p>
+        </div>
+        <p class="display text-[17px] md:text-[20px] shrink-0">$9</p>
+      </li>
+      <li class="flex items-start justify-between gap-6 border-b border-ink/15 py-4">
+        <div>
+          <p class="display text-[17px] md:text-[20px] tracking-[-0.01em]">Banana Matcha</p>
+          <p class="italic text-[14px] md:text-[15px] text-ink/60 mt-1">Matcha latte with house-made banana syrup.</p>
+        </div>
+        <p class="display text-[17px] md:text-[20px] shrink-0">$9</p>
+      </li>
+      <li class="flex items-start justify-between gap-6 border-b border-ink/15 py-4">
+        <div>
+          <p class="display text-[17px] md:text-[20px] tracking-[-0.01em]">Double Matcha</p>
+          <p class="italic text-[14px] md:text-[15px] text-ink/60 mt-1">Layered with house-made matcha cream.</p>
+        </div>
+        <p class="display text-[17px] md:text-[20px] shrink-0">$10</p>
+      </li>
+      <li class="flex items-start justify-between gap-6 border-b border-ink py-4">
+        <div>
+          <p class="display text-[17px] md:text-[20px] tracking-[-0.01em]">Mango Sticky Rice Matcha</p>
+          <p class="italic text-[14px] md:text-[15px] text-ink/60 mt-1">Mango matcha topped with mango sticky rice cream.</p>
+        </div>
+        <p class="display text-[17px] md:text-[20px] shrink-0">$10</p>
+      </li>
+    </ul>
+
+    <h3 class="display text-[7vw] md:text-[3.2vw] mt-12 mb-4">Coffee</h3>
+    <ul class="border-t border-ink">
+      <li class="flex items-start justify-between gap-6 border-b border-ink py-4">
+        <div>
+          <p class="display text-[17px] md:text-[20px] tracking-[-0.01em]">Coffee Einspanner</p>
+          <p class="italic text-[14px] md:text-[15px] text-ink/60 mt-1">Espresso layered with salted sweet cream.</p>
+        </div>
+        <p class="display text-[17px] md:text-[20px] shrink-0">$9</p>
+      </li>
+    </ul>
+
+    <p class="mt-6 text-[15px] text-ink/60 max-w-[54ch] leading-[1.45]">
+      Event menus are built to fit — we'll scale this down to two signatures or open the whole
+      board, and we can add a custom drink named for the occasion.
+    </p>
+  </section>
+
+  <!-- ══════════════ GALLERY ══════════════ -->
+  <section class="gm pb-16 md:pb-24" aria-label="Fifths Collective drinks">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+      <img src="matcha-pour.jpg" alt="Matcha poured from a ceramic pitcher over iced cream into a Fifths Collective cup"
+           class="w-full aspect-[4/5] object-cover block">
+      <img src="drinks-tray.jpg" alt="A mango matcha and a strawberry matcha on a steel tray, stickers facing out"
+           class="w-full aspect-[4/5] object-cover block">
+    </div>
+  </section>
+
+  <!-- ══════════════ BOOKINGS ══════════════ -->
+  <section id="bookings" class="border-y border-ink">
+    <div class="grid grid-cols-1 md:grid-cols-2">
+      <div class="order-2 md:order-1 gm py-14 md:py-20 flex flex-col justify-center">
+        <p class="display text-[13px] text-fifth">(&thinsp;Bookings&thinsp;)</p>
+        <h2 class="display text-[9vw] md:text-[4.4vw] leading-[0.88] mt-3 max-w-[15ch]">
+          Bring the cart to your event.
+        </h2>
+        <p class="mt-5 max-w-[46ch] text-[16px] md:text-[17px] leading-[1.45]">
+          Weddings, brand activations, office mornings, markets, pop-ups, birthdays. We roll in
+          with the full bar, hand your guests the best matcha they've had — then pack out clean.
+        </p>
+
+        <ul class="mt-7 flex flex-col gap-2.5">
+          <li class="flex gap-3 items-baseline">
+            <span class="text-fifth display text-[13px] shrink-0">✳︎</span>
+            <span class="text-[16px]">Indoor or outdoor — the cart is fully self-contained.</span>
+          </li>
+          <li class="flex gap-3 items-baseline">
+            <span class="text-fifth display text-[13px] shrink-0">✳︎</span>
+            <span class="text-[16px]">Serving anywhere in Chicago and the surrounding suburbs.</span>
+          </li>
+          <li class="flex gap-3 items-baseline">
+            <span class="text-fifth display text-[13px] shrink-0">✳︎</span>
+            <span class="text-[16px]">Menus built to fit the occasion, down to the cups.</span>
+          </li>
+        </ul>
+
+        <a href="#contact"
+           class="display text-[14px] mt-9 self-start border border-ink rounded-full px-6 py-3 hover:bg-ink hover:text-paper transition-colors">
+          Check our availability &nbsp;→
+        </a>
+      </div>
+      <div class="order-1 md:order-2 md:border-l border-ink">
+        <img src="cart.jpg" alt="The Fifths Collective cart set up outdoors with its menu board and oat milk on the counter"
+             class="w-full h-full min-h-[320px] md:min-h-[560px] object-cover object-center block">
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CONTACT / BOOKING FORM ══════════════ -->
+  <section id="contact" class="gm pt-16 pb-20 md:pt-24 md:pb-28">
+    <div class="flex items-end justify-between border-b border-ink pb-3 mb-8">
+      <h2 class="display text-[14vw] md:text-[9vw] leading-[0.8]">Contact</h2>
+      <span class="display text-[13px] pb-2">(&thinsp;Events&thinsp;)</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-y-10 md:gap-x-8">
+
+      <div class="md:col-span-4 min-w-0">
+        <h3 class="display text-[26px] md:text-[30px] leading-[0.95] max-w-[14ch]">
+          Tell us about your event.
+        </h3>
+        <p class="mt-4 text-[16px] leading-[1.45] max-w-[38ch]">
+          Fill this out and it lands straight in our inbox. We answer every inquiry, usually
+          within a day or two.
+        </p>
+        <p class="mt-6 text-[15px]">
+          Prefer email?<br>
+          <a href="mailto:fifthscollective@gmail.com" class="display text-[16px] link-u break-words">fifthscollective@gmail.com</a>
+        </p>
+      </div>
+
+      <div class="md:col-span-8 min-w-0">
+        <form id="bookingForm" novalidate>
+          <div class="flex flex-col">
+
+            <div class="field grid grid-cols-1 sm:grid-cols-2">
+              <input name="name" type="text" required autocomplete="name" placeholder="Your name *"
+                     class="h-[62px] px-4 bg-transparent text-[16px] sm:border-r border-ink">
+              <input name="email" type="email" required autocomplete="email" placeholder="Email address *"
+                     class="h-[62px] px-4 bg-transparent text-[16px] border-t sm:border-t-0 border-ink">
+            </div>
+
+            <div class="field grid grid-cols-1 sm:grid-cols-2">
+              <input name="phone" type="tel" autocomplete="tel" placeholder="Phone (optional)"
+                     class="h-[62px] px-4 bg-transparent text-[16px] sm:border-r border-ink">
+              <input name="date" type="text" placeholder="Event date"
+                     onfocus="this.type='date'" onblur="if(!this.value)this.type='text'"
+                     class="h-[62px] px-4 bg-transparent text-[16px] border-t sm:border-t-0 border-ink">
+            </div>
+
+            <div class="field grid grid-cols-1 sm:grid-cols-2">
+              <select name="type" class="field-select h-[62px] px-4 bg-transparent text-[16px] sm:border-r border-ink appearance-none">
+                <option value="">Event type</option>
+                <option>Wedding</option>
+                <option>Corporate / office</option>
+                <option>Brand activation</option>
+                <option>Pop-up / market</option>
+                <option>Private party</option>
+                <option>Other</option>
+              </select>
+              <input name="guests" type="text" inputmode="numeric" placeholder="Approx. guest count"
+                     class="h-[62px] px-4 bg-transparent text-[16px] border-t sm:border-t-0 border-ink">
+            </div>
+
+            <div class="field">
+              <input name="location" type="text" placeholder="Location / neighborhood"
+                     class="w-full h-[62px] px-4 bg-transparent text-[16px]">
+            </div>
+
+            <div class="field">
+              <textarea name="message" rows="5" placeholder="Tell us about your event — timing, vibe, anything we should know."
+                        class="w-full p-4 bg-transparent text-[16px] resize-y"></textarea>
+            </div>
+
+          </div>
+
+          <!-- Bots fill hidden fields; humans never see this one. -->
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"
+                 class="absolute w-px h-px -left-[9999px] opacity-0" aria-hidden="true">
+
+          <button type="submit" id="bookingSubmit"
+                  class="w-full h-[76px] mt-4 bg-olive text-ink text-[16px] hover:bg-ink hover:text-paper transition-colors disabled:opacity-60">
+            Send Inquiry
+          </button>
+
+          <p id="bookingMsg" role="status" class="text-[15px] mt-3 min-h-[24px] leading-[1.4]"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer class="gm pt-12 md:pt-16 overflow-hidden">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-12 sm:gap-x-8 [&>*]:min-w-0">
+
+    <!-- Left column -->
+    <div>
+      <nav class="flex flex-col leading-[1.12]">
+        <a href="#menu"     class="display text-[15px] w-fit hover:text-fifth transition-colors">Menu</a>
+        <a href="#about"    class="display text-[15px] w-fit hover:text-fifth transition-colors">About</a>
+        <a href="#bookings" class="display text-[15px] w-fit hover:text-fifth transition-colors">Bookings</a>
+        <a href="#contact"  class="display text-[15px] w-fit hover:text-fifth transition-colors">Contact</a>
+        <a href="privacy.html" class="display text-[15px] w-fit hover:text-fifth transition-colors">Privacy Policy</a>
+      </nav>
+
+      <div class="mt-7 leading-[1.12]">
+        <a href="mailto:fifthscollective@gmail.com" class="display text-[15px] link-u break-words">fifthscollective@gmail.com</a>
+        <p class="display text-[15px]">Chicago, IL</p>
+        <p class="display text-[15px]">©2026 Fifths Collective LLC.</p>
+      </div>
+
+      <a href="https://www.instagram.com/fifthscollective?utm_source=qr"
+         target="_blank" rel="noopener noreferrer"
+         aria-label="Fifths Collective on Instagram"
+         class="inline-block mt-7 hover:text-fifth transition-colors">
+        <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5.5"/>
+          <circle cx="12" cy="12" r="4.6"/>
+          <circle cx="17.7" cy="6.3" r="1.2" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Giant wordmark, flush to the bottom edge -->
+  <div class="mt-16 md:mt-24 overflow-hidden">
+    <span class="wordmark select-none">Fif<span class="kern-t">t</span>hs</span>
+  </div>
+</footer>
+
+<script>
+  /* ─────────────────────────────────────────────────────────────
+     WHERE INQUIRIES GO
+
+     Paste a form-service endpoint below and every booking inquiry
+     posts straight to fifthscollective@gmail.com in the background —
+     the visitor never leaves the page.
+
+       Formspree   https://formspree.io   →  "https://formspree.io/f/xxxxxxxx"
+       Web3Forms   https://web3forms.com  →  "https://api.web3forms.com/submit"
+                                              (also set ACCESS_KEY below)
+
+     Left empty, the form falls back to opening the visitor's mail app
+     with everything pre-filled, so it still works today — it just needs
+     them to press Send themselves.
+     ───────────────────────────────────────────────────────────── */
+  const FORM_ENDPOINT = "https://formspree.io/f/mgogeezo";   // Formspree → fifthscollective@gmail.com
+  const WEB3FORMS_KEY = "";                                  // (unused — Formspree handles delivery)
+  const INBOX         = "fifthscollective@gmail.com";
+
+  /* Mailchimp audience (Fifths Collective).
+     Uses the post-json endpoint via JSONP: Mailchimp sends no CORS headers, so a normal
+     fetch() would be blocked. A script tag sidesteps that and keeps the visitor on the page
+     instead of bouncing them to Mailchimp's own confirmation screen. */
+  const MC_URL = "https://gmail.us9.list-manage.com/subscribe/post-json?u=802b4ca14f768216716a13a24&id=790ce712d7&f_id=008484e1f0";
+  const MC_BOT = "b_802b4ca14f768216716a13a24_790ce712d7";  // honeypot Mailchimp requires to be empty
+
+  // Mailchimp wants E.164 ("+13125550142"). Visitors type all sorts of things.
+  function toE164(raw) {
+    const digits = (raw || '').replace(/\D/g, '');
+    if (!digits) return '';
+    if (digits.length === 10) return '+1' + digits;                  // 312 555 0142
+    if (digits.length === 11 && digits[0] === '1') return '+' + digits; // 1 312 555 0142
+    return raw.trim().startsWith('+') ? '+' + digits : '';           // anything else: only trust an explicit +
+  }
+
+  function mcSubscribe(email, name, phone) {
+    return new Promise(resolve => {
+      const cb = 'mc_cb_' + Date.now();
+      const script = document.createElement('script');
+      const done = data => {
+        delete window[cb];
+        script.remove();
+        resolve(data);
+      };
+      window[cb] = done;
+      script.onerror = () => done({ result: 'error', msg: 'network' });
+
+      const params = new URLSearchParams({ EMAIL: email, FNAME: name, c: cb });
+      if (phone) {
+        params.append('SMSPHONE', phone);
+        params.append('mc-SMSPHONE-ack', 'true');   // records the express consent
+      }
+      params.append(MC_BOT, '');
+      script.src = MC_URL + '&' + params.toString();
+      document.body.appendChild(script);
+    });
+  }
+
+  // ── Hero reel ─────────────────────────────────────────────────
+  // Cycles the stacked clips, cross-dissolving between them. The clips carry no loop attribute
+  // on purpose: 'ended' is what advances the reel, and a looping clip never ends.
+  const heroClips = Array.from(document.querySelectorAll('.hero-clip'));
+  const stillHero = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (stillHero) {
+    // Hold the first frame, no cycling — same contract as the ticker.
+    heroClips.forEach(v => { v.removeAttribute('autoplay'); v.pause(); });
+  } else if (heroClips.length) {
+    const FADE_MS = 700;     // must match the .hero-clip transition
+    let current = 0;
+
+    // Pull the next clip down only when it's about to be needed, so the page costs one
+    // clip on load instead of three.
+    const warm = i => {
+      const v = heroClips[i];
+      if (v && v.preload === 'none') { v.preload = 'auto'; v.load(); }
+    };
+
+    const advance = () => {
+      const next = (current + 1) % heroClips.length;
+      const outgoing = heroClips[current];
+      const incoming = heroClips[next];
+
+      // Both opacity transitions run together, so this reads as one dissolve.
+      incoming.classList.add('is-active');
+      const p = incoming.play();
+      if (p) p.catch(() => {});             // autoplay refusal shouldn't stall the reel
+      outgoing.classList.remove('is-active');
+
+      // Let the outgoing clip keep playing while it fades; freezing it mid-dissolve is
+      // more noticeable than the extra moment of decode.
+      setTimeout(() => {
+        outgoing.pause();
+        try { outgoing.currentTime = 0; } catch (e) {}
+      }, FADE_MS);
+
+      current = next;
+      warm((next + 1) % heroClips.length);
+    };
+
+    heroClips.forEach(v => {
+      v.addEventListener('ended', () => {
+        if (v.classList.contains('is-active')) advance();
+      });
+      // A clip that fails to load would otherwise park the reel on a black frame.
+      v.addEventListener('error', () => {
+        if (v.classList.contains('is-active')) advance();
+      });
+    });
+
+    warm(1);
+  }
+
+  // ── Slide-down nav ────────────────────────────────────────────
+  const panel = document.getElementById('navPanel');
+  const openNav  = () => panel.classList.remove('translate-y-[-100%]');
+  const closeNav = () => panel.classList.add('translate-y-[-100%]');
+
+  document.getElementById('menuBtn').addEventListener('click', openNav);
+  document.getElementById('navClose').addEventListener('click', closeNav);
+  panel.querySelectorAll('.nav-link').forEach(a => a.addEventListener('click', closeNav));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
+
+  // ── Booking form ──────────────────────────────────────────────
+  const form   = document.getElementById('bookingForm');
+  const submit = document.getElementById('bookingSubmit');
+  const note   = document.getElementById('bookingMsg');
+
+  const say = (text, ok) => {
+    note.textContent = text;
+    note.className = `text-[15px] mt-3 min-h-[24px] leading-[1.4] ${ok ? 'text-fifth' : 'text-maroon'}`;
+  };
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = new FormData(form);
+
+    if (f.get('_gotcha')) return;                       // bot
+    if (!f.get('name').trim())            return say('Please add your name.', false);
+    if (!/\S+@\S+\.\S+/.test(f.get('email'))) return say('Please add a valid email address.', false);
+
+    const subject = `Booking inquiry — ${f.get('type') || 'Event'}${f.get('date') ? ' on ' + f.get('date') : ''}`;
+
+    if (!FORM_ENDPOINT) {
+      // Fallback: hand the visitor a pre-written email addressed to us.
+      const body = [
+        `Name: ${f.get('name')}`,
+        `Email: ${f.get('email')}`,
+        `Phone: ${f.get('phone') || '—'}`,
+        `Event date: ${f.get('date') || '—'}`,
+        `Event type: ${f.get('type') || '—'}`,
+        `Guests: ${f.get('guests') || '—'}`,
+        `Location: ${f.get('location') || '—'}`,
+        ``,
+        f.get('message') || ''
+      ].join('\n');
+      window.location.href =
+        `mailto:${INBOX}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      say('Opening your email app — press send and it reaches us.', true);
+      return;
+    }
+
+    submit.disabled = true;
+    submit.textContent = 'Sending…';
+
+    if (WEB3FORMS_KEY) { f.append('access_key', WEB3FORMS_KEY); f.append('subject', subject); }
+    else               { f.append('_subject', subject); }
+
+    try {
+      const res = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        body: f,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!res.ok) throw new Error(res.status);
+      form.reset();
+      say('Thanks — your inquiry is in. We’ll be in touch shortly.', true);
+    } catch (err) {
+      say(`Something went wrong sending that. Email us directly at ${INBOX}.`, false);
+    } finally {
+      submit.disabled = false;
+      submit.textContent = 'Send Inquiry';
+    }
+  });
+
+</script>
+
+</body>
+</html>
